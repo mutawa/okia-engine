@@ -3,22 +3,41 @@ class OkiaEngine {
         minNumberOfPlayers, 
         deck, 
         players}) {
-        this.config = config;
+        
+            this.config = config;
 
     }
 
     join(player) {
-        if(this.config.players.length < this.config.minNumberOfPlayers) {
-            for(let p of this.config.players) {
-                if (p.name === player.name) {
-                    console.error(`Player with name ${player.name} alreay exists`);
-                    return false;
-                } 
-            }
-            this.config.players.push(player);
-        } else {
-            console.error(`OkiaEngine.join: can't join more than ${this.config.minNumberOfPlayers} players`);
+        let canJoin = false;
+
+        // player maybe a string (a name) or a Player object
+        if(typeof player === "string") {
+            console.log(`converting string to player(${player})`);
+            player = new Player(player);
         }
+
+        if(player instanceof Player) {
+            if(this.config.players.length < this.config.minNumberOfPlayers) {
+                for(let p of this.config.players) {
+                    if (p.name === player.name) {
+                        console.error(`Player with name ${player.name} alreay exists`);
+                        canJoin = false;
+                        break;
+                    } 
+                }
+                console.log(`Player with name ${player.name} joined...`);
+                this.config.players.push(player);
+                canJoin = true;
+            } else {
+                console.error(`OkiaEngine.join: can't join more than ${this.config.minNumberOfPlayers} players`);
+                canJoin = false;
+            }
+
+        }
+
+        return canJoin;
+        
     }
     leave(name) {
         for(let i=0; i<this.config.players.length; i++) {

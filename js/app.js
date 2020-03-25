@@ -7,7 +7,8 @@ const config = {
 };
 
 let game = new OkiaEngine(config);
-game.join(new Player("ahmad"));
-game.join(new Player("ali"));
-game.join(new Player("zaki"));
-game.join(new Player("jawad"));
+game.join("ahmad");
+game.join("jamal");
+game.join("zaki");
+game.join("salman");
+

@@ -5,6 +5,7 @@ class OkiaEngine {
         players}) {
         
             this.config = config;
+            this.config.started = false;
 
     }
 
@@ -39,21 +40,51 @@ class OkiaEngine {
         return canJoin;
         
     }
+
     leave(name) {
         for(let i=0; i<this.config.players.length; i++) {
             let p = this.config.players[i];
             if(p.name === name) {
                 this.config.players.splice(i, 1);
+                console.warn(`Player [${p.name}] left the game`);
+                this.pause();
                 return true;
+                
             }
         }
         console.error(`Player with name ${name} is not part of this game`);
         return false;
 
     }
-    getStatus() {
+
+    status() {
+        console.table(this.config);
         return this.config;
     }
+
+    pause() {
+        if(this.config.started) {
+            console.warn("game paused");
+            this.config.started = false;
+        }
+        
+    }
+    start() {
+        if(!this.config.started) {
+            if(this.config.players.length===this.config.minNumberOfPlayers) {
+                this.config.started = true;
+                console.log("game started.");
+            } else {
+                console.error(`can't start with less than ${this.config.minNumberOfPlayers} players`);
+            }
+            
+        } else {
+            console.error("game is already started");
+        }
+        
+    }
+
+
 }
 
 class Player {

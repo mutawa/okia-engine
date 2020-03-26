@@ -5,6 +5,8 @@ class OkiaEngine {
         
             this.config = config;
             this.config.deck = new OkiaDeck();
+           
+            
             this.pause();
 
     }
@@ -74,9 +76,8 @@ class OkiaEngine {
         this.pause();
         this.config.deck = new OkiaDeck();
         this.config.deck.shuffle();
-        for(let i=0; i<this.config.minNumberOfPlayers; i++) {
-            
-            this.config.players[i].cards = this.config.deck.cards.splice(0,13);
+        for(let player of this.config.players) {
+            player.setHand({cards: this.config.deck.cards.splice(0,13), clearEats: true});
         }
         this.resume();
         
@@ -103,6 +104,17 @@ class OkiaEngine {
         }
         
     }
+    toString() {
+        let text = "H:b,M:count,W:[0,2],";
+        for(let i=0; i<this.config.minNumberOfPlayers; i++) {
+            let p = this.config.players[i];
+            let c = p.hand();
+            let e = p.eats.length/4;
+            text += `P${i}:<${p.name},C:[${c}],E:${e}>`;
+        }
+        
+        return text;
+    }
 
 
 }
@@ -110,6 +122,14 @@ class OkiaEngine {
 class Player {
     constructor(name) {
         this.name = name;
+        this.eats = [];
+    }
+    setHand({cards, clearEats}) {
+        if(clearEats) { this.eats = [] }
+        this.cards = cards;
+    }
+    hand() {
+        return this.cards.map(card=>card.color.substr(0,1)+card.value).join(",");
     }
 }
 class OkiaDeck {

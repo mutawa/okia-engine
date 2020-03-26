@@ -1,10 +1,10 @@
 class OkiaEngine {
     constructor(config = {
         minNumberOfPlayers, 
-        deck, 
         players}) {
         
             this.config = config;
+            this.config.deck = new OkiaDeck();
             this.pause();
 
     }

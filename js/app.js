@@ -1,8 +1,7 @@
 
 const config = {
     minNumberOfPlayers: 4,
-    players: [],
-    deck: new OkiaDeck()
+    players: []
 };
 
 let game = new OkiaEngine(config);
